@@ -12,7 +12,10 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        $customers = Customer::all();
+        return view('pages.customers.index', [
+            'customers' => $customers
+        ]);
     }
 
     /**
@@ -20,7 +23,7 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.customers.create');
     }
 
     /**
@@ -28,7 +31,9 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        Customer::create($data);
+        return redirect()->route('customers.index');
     }
 
     /**
@@ -42,24 +47,30 @@ class CustomerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Customer $customer)
+    public function edit($id)
     {
-        //
+        $items = Customer::findOrFail($id);
+        return view('pages.customers.edit', [
+            'item' => $items,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Customer $customer)
+    public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        Customer::findOrFail($id)->update($data);
+        return redirect()->route('customers.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Customer $customer)
+    public function destroy($id)
     {
-        //
+        Customer::findOrFail($id)->delete();
+        return redirect()->route('customers.index');
     }
 }
